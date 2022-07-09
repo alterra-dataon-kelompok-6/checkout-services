@@ -11,9 +11,11 @@ import (
 
 func GetPaymentMethodController(c echo.Context) error {
 	paymentMethod, err := database.GetPaymentMethod()
+
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
+
 	return c.JSON(http.StatusOK, models.Response{
 		Status:  "success",
 		Message: "success get payment method",
@@ -28,15 +30,18 @@ func PostPaymentController(c echo.Context) error {
 	payloadData["amount"] = c.FormValue("amount")
 	payloadData["payment_method"] = c.FormValue("payment_method")
 	payment, err := database.PostPayment(userId, payloadData)
+
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
+
 	if payment == "Payment method invalid" || payment == "This bill has been paid" || payment == "The bill you want to pay was not found" {
 		return c.JSON(http.StatusBadRequest, models.Response{
 			Status:  "fail",
 			Message: payment,
 		})
 	}
+
 	return c.JSON(http.StatusOK, models.Response{
 		Status:  "success",
 		Message: "payment success",
@@ -47,14 +52,17 @@ func PostPaymentController(c echo.Context) error {
 func GetPendingPaymentController(c echo.Context) error {
 	userId := middlewares.ExtractTokenUserId(c)
 	payment, err := database.GetPendingPayment(userId)
+
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+
 	} else if payment == false {
 		return c.JSON(http.StatusOK, models.Response{
 			Status:  "success",
 			Message: "You don't have pending payment",
 		})
 	}
+
 	return c.JSON(http.StatusOK, models.Response{
 		Status:  "success",
 		Message: "success get pending payment",
@@ -65,14 +73,17 @@ func GetPendingPaymentController(c echo.Context) error {
 func GetPaymentHistoryController(c echo.Context) error {
 	userId := middlewares.ExtractTokenUserId(c)
 	payment, err := database.GetPaymentHistory(userId)
+
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+
 	} else if payment == false {
 		return c.JSON(http.StatusBadRequest, models.Response{
 			Status:  "fail",
 			Message: "You don't have payment history",
 		})
 	}
+
 	return c.JSON(http.StatusOK, models.Response{
 		Status:  "success",
 		Message: "success get payment history",
@@ -83,14 +94,17 @@ func GetPaymentHistoryController(c echo.Context) error {
 func GetPaymentDetailsControllers(c echo.Context) error {
 	id := c.Param("id")
 	paymentDetails, err := database.GetPaymentDetails(id)
+
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+
 	} else if paymentDetails == false {
 		return c.JSON(http.StatusForbidden, models.Response{
 			Status:  "fail",
 			Message: "You don't have access to this data",
 		})
 	}
+
 	return c.JSON(http.StatusOK, models.Response{
 		Status:  "success",
 		Message: "success get payment details",

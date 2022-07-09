@@ -15,7 +15,7 @@ func main() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
-	// end
+	// akhir dari tambahan
 
 	config.InitDB()
 	config.InitMigrate()

@@ -53,5 +53,6 @@ func New() *echo.Echo {
 	r.GET("/payment_history", controllers.GetPaymentHistoryController)
 	r.GET("/payment_history/:id", controllers.GetPaymentDetailsControllers)
 	r.POST("/payment", controllers.PostPaymentController)
+
 	return e
 }

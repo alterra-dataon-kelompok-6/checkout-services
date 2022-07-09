@@ -56,6 +56,7 @@ func CheckoutItem(cartItemId, userId int, voucherCode string) (interface{}, erro
 	cartItem := []models.Cart_item{}
 	// checkout all
 	cekItem := config.DB.Where("cart_id = ?", cartId).Find(&cartItem)
+
 	if cekItem.RowsAffected == 0 {
 		return false, nil
 	}
@@ -70,15 +71,18 @@ func CheckoutItem(cartItemId, userId int, voucherCode string) (interface{}, erro
 
 	// dapatkan data item total dan amount untuk dimasukkan ke informasi payment
 	checkout := models.Checkout{}
+
 	if cartItemId != 0 {
 		// checkout by cart item id
 		config.DB.Raw("SELECT qty AS item_total, (cart_items.price*qty) AS amount, product_name AS product FROM cart_items LEFT JOIN products ON cart_items.product_id = products.product_id WHERE cart_item_id = ?", cartItemId).Find(&checkout)
+
 	} else {
 		// checkout all
 		config.DB.Raw("SELECT SUM(qty) AS item_total, SUM(cart_items.price*qty) AS amount, product_name AS product FROM cart_items LEFT JOIN products ON cart_items.product_id = products.product_id WHERE cart_id = ?", cartId).Find(&checkout)
 	}
 
 	totalAmount := checkout.Amount
+
 	// if voucherCode != "" {
 	// 	disc := GetVoucherDiscount(totalAmount, voucherCode)
 	// 	totalAmount = totalAmount - disc
@@ -100,6 +104,7 @@ func CheckoutItem(cartItemId, userId int, voucherCode string) (interface{}, erro
 	// }
 
 	// masukkan informasi payment
+
 	payment := models.Payment{
 		Payment_id:     paymentId,
 		User_id:        userId,
@@ -108,6 +113,7 @@ func CheckoutItem(cartItemId, userId int, voucherCode string) (interface{}, erro
 		Created_at:     time.Now(),
 		Expired_at:     time.Now().AddDate(0, 0, 1),
 	}
+
 	config.DB.Create(&payment)
 
 	// masukan checkout item ke tabel payment items dengan perulangan
