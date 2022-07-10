@@ -48,10 +48,10 @@ func New() *echo.Echo {
 	r.POST("/checkout", controllers.PostCheckoutController)
 
 	// Payment
-	r.GET("/payment_method", controllers.GetPaymentMethodController)
-	r.GET("/payment", controllers.GetPendingPaymentController)
-	r.GET("/payment_history", controllers.GetPaymentHistoryController)
-	r.GET("/payment_history/:id", controllers.GetPaymentDetailsControllers)
+	// r.GET("/payment_method", controllers.GetPaymentMethodController)
+	// r.GET("/payment", controllers.GetPendingPaymentController)
+	// r.GET("/payment_history", controllers.GetPaymentHistoryController)
+	// r.GET("/payment_history/:id", controllers.GetPaymentDetailsControllers)
 	r.POST("/payment", controllers.PostPaymentController)
 
 	return e

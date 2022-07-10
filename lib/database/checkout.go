@@ -48,7 +48,7 @@ func GetCheckoutTotalById(cartItemId, userId int) (interface{}, error) {
 	return checkout, nil
 }
 
-func CheckoutItem(cartItemId, userId int, voucherCode string) (interface{}, error) {
+func CheckoutItem(cartItemId, userId int) (interface{}, error) {
 	paymentId := CreatePaymentId()
 	cartId := CheckCart(userId)
 

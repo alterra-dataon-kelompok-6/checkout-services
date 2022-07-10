@@ -59,7 +59,7 @@ func PostCheckoutController(c echo.Context) error {
 	userId := middlewares.ExtractTokenUserId(c)
 	cartItemId := c.FormValue("cart_id")
 
-	voucherCode := c.FormValue("voucher_code")
+	// voucherCode := c.FormValue("voucher_code")
 
 	// validasi jika menggunakan kode voucher
 	// if voucherCode != "" {
@@ -77,7 +77,7 @@ func PostCheckoutController(c echo.Context) error {
 	}
 
 	cartItemIdInt, _ := strconv.Atoi(cartItemId)
-	checkout, err := database.CheckoutItem(cartItemIdInt, userId, voucherCode)
+	checkout, err := database.CheckoutItem(cartItemIdInt, userId)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
