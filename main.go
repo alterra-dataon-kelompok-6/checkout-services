@@ -5,13 +5,12 @@ import (
 	"checkout-services/routes"
 	"fmt"
 	"log"
-	"os"
 )
 
 func main() {
 
 	// tambahan
-	port := os.Getenv("PORT")
+	port := "8090" // os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
