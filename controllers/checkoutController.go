@@ -126,7 +126,7 @@ func GetCheckoutByIdController(c echo.Context) error {
 // }
 
 func PostCheckoutController(c echo.Context) error {
-	authToken := c.Request().Header.Get("Token")
+	authToken := c.Request().Header.Get("Authorization")
 
 	url := "http://54.179.213.175:8089/carts"
 
@@ -135,7 +135,7 @@ func PostCheckoutController(c echo.Context) error {
 	var bearer = "Bearer " + authToken
 
 	// Create a new request using http
-	req, err := http.NewRequest("DELETE", url, nil)
+	req, _ := http.NewRequest("DELETE", url, nil)
 
 	// add authorization header to the req
 	req.Header.Add("Authorization", bearer)
@@ -168,6 +168,6 @@ func PostCheckoutController(c echo.Context) error {
 	return c.JSON(http.StatusOK, models.Response{
 		Status:  "success",
 		Message: "success checkout product from your shopping cart",
-		Data:    body,
+		Data:    "",
 	})
 }
