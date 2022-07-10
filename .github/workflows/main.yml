@@ -51,4 +51,4 @@ jobs:
     #- name: stop running container
     #  run: ssh staging 'sudo docker container stop learn && sudo docker container rm learn'
     - name: deploy application
-      run: ssh staging 'sudo docker rm -f checkout-services && sudo docker pull saahalla/checkout-services:0.0.1 && sudo docker run -d -p 8088:8088 --name checkout-services --network local-network saahalla/checkout-services:0.0.1'
+      run: ssh staging 'sudo docker rm -f checkout-services && sudo docker pull saahalla/checkout-services:0.0.1 && sudo docker run -d -p 8090:8090 --name checkout-services --network local-network saahalla/checkout-services:0.0.1'
