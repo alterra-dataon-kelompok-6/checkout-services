@@ -29,6 +29,8 @@ func New() *echo.Echo {
 	// e.POST("/login", controllers.LoginUserController)
 	// e.POST("/register", controllers.RegisterUserController)
 
+	e.POST("/checkout", controllers.PostCheckoutController)
+
 	// JWT Group
 	r := e.Group("")
 	r.Use(middlewareEcho.JWT([]byte(constants.SECRET_JWT)))
@@ -45,7 +47,7 @@ func New() *echo.Echo {
 	// r.GET("/myvoucher", controllers.GetMyVoucherController)
 	r.GET("/checkout", controllers.GetCheckoutTotalController)
 	r.GET("/checkout/:id", controllers.GetCheckoutByIdController)
-	r.POST("/checkout", controllers.PostCheckoutController)
+	e.POST("/checkout", controllers.PostCheckoutController)
 
 	// Payment
 	// r.GET("/payment_method", controllers.GetPaymentMethodController)

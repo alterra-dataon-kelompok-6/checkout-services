@@ -24,7 +24,7 @@ func ExtractTokenUserId(e echo.Context) int {
 
 	if user.Valid {
 		claims := user.Claims.(jwt.MapClaims)
-		userID := int(claims["userId"].(float64))
+		userID := int(claims["customer_id"].(float64))
 		return userID
 	}
 
