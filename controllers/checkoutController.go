@@ -126,16 +126,16 @@ func GetCheckoutByIdController(c echo.Context) error {
 // }
 
 func PostCheckoutController(c echo.Context) error {
-	// authToken := c.Request().Header.Get("Apalah")
+	authToken := c.Request().Header.Get("Token")
 
 	url := "http://54.179.213.175:8089/carts"
 
 	// Create a Bearer string by appending string access token
-	var bearer = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NTc1NDkyMjUsInVzZXJJZCI6MX0.btcMQNtoqVcvpM_fBh5SPh4mBwJ85K50kKlsv7bKIs4"
-	// var bearer = "Bearer " + authToken
+	// var bearer = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NTc1NDkyMjUsInVzZXJJZCI6MX0.btcMQNtoqVcvpM_fBh5SPh4mBwJ85K50kKlsv7bKIs4"
+	var bearer = "Bearer " + authToken
 
 	// Create a new request using http
-	req, _ := http.NewRequest("DELETE", url, nil)
+	req, err := http.NewRequest("DELETE", url, nil)
 
 	// add authorization header to the req
 	req.Header.Add("Authorization", bearer)
@@ -154,5 +154,20 @@ func PostCheckoutController(c echo.Context) error {
 	}
 	log.Println(string([]byte(body)))
 
-	return nil
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	if req == nil {
+		return c.JSON(http.StatusBadRequest, models.Response{
+			Status:  "fail",
+			Message: "your requested data was not found",
+		})
+	}
+
+	return c.JSON(http.StatusOK, models.Response{
+		Status:  "success",
+		Message: "success checkout product from your shopping cart",
+		Data:    body,
+	})
 }
