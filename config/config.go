@@ -35,13 +35,5 @@ func InitDB() {
 }
 
 func InitMigrate() {
-	DB.AutoMigrate(&models.Cart_item{})
-	DB.AutoMigrate(&models.Cart{})
 	DB.AutoMigrate(&models.Checkout{})
-	DB.AutoMigrate(&models.Payment{})
-	DB.AutoMigrate(&models.Payment_history{})
-	DB.AutoMigrate(&models.Payment_item{})
-	DB.AutoMigrate(&models.Payment_method{})
-	DB.AutoMigrate(&models.Response{})
-	DB.AutoMigrate(&models.Uuid{})
 }
