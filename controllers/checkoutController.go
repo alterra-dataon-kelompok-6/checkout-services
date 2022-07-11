@@ -12,6 +12,46 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func PostCheckoutController(c echo.Context) error {
+	authToken := c.Request().Header.Get("Authorization")
+
+	var (
+		stock, price []uint
+		total        uint
+	)
+
+	productId, qty := getQty(authToken)
+
+	for i := 0; i < len(qty); i++ {
+		stock = append(stock, getCurrentStock(strconv.FormatUint(uint64(productId[i]), 10)))
+		price = append(price, getPrice(strconv.FormatUint(uint64(productId[i]), 10)))
+	}
+
+	for i := 0; i < len(qty); i++ {
+		updateStock(strconv.FormatUint(uint64(productId[i]), 10), stock[i]-qty[i])
+	}
+
+	for i := 0; i < len(qty); i++ {
+		total += price[i] * qty[i]
+	}
+
+	deleteCart(authToken)
+
+	if total == 0 {
+		return c.JSON(http.StatusBadRequest, models.Response{
+			Status:  "bad request",
+			Message: "cart is empty",
+			Total:   total,
+		})
+	}
+
+	return c.JSON(http.StatusOK, models.Response{
+		Status:  "success",
+		Message: "success checkout product from your shopping cart",
+		Total:   total,
+	})
+}
+
 func getQty(token string) ([]uint, []uint) {
 	var data models.ResponseCart
 	var productId, qty []uint
@@ -175,44 +215,4 @@ func deleteCart(token string) error {
 	defer resp.Body.Close()
 
 	return err
-}
-
-func PostCheckoutController(c echo.Context) error {
-	authToken := c.Request().Header.Get("Authorization")
-
-	var (
-		stock, price []uint
-		total        uint
-	)
-
-	productId, qty := getQty(authToken)
-
-	for i := 0; i < len(qty); i++ {
-		stock = append(stock, getCurrentStock(strconv.FormatUint(uint64(productId[i]), 10)))
-		price = append(price, getPrice(strconv.FormatUint(uint64(productId[i]), 10)))
-	}
-
-	for i := 0; i < len(qty); i++ {
-		updateStock(strconv.FormatUint(uint64(productId[i]), 10), stock[i]-qty[i])
-	}
-
-	for i := 0; i < len(qty); i++ {
-		total += price[i] * qty[i]
-	}
-
-	deleteCart(authToken)
-
-	if total == 0 {
-		return c.JSON(http.StatusBadRequest, models.Response{
-			Status:  "bad request",
-			Message: "cart is empty",
-			Total:   total,
-		})
-	}
-
-	return c.JSON(http.StatusOK, models.Response{
-		Status:  "success",
-		Message: "success checkout product from your shopping cart",
-		Total:   total,
-	})
 }
