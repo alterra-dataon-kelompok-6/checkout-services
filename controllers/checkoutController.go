@@ -202,7 +202,7 @@ func PostCheckoutController(c echo.Context) error {
 
 	deleteCart(authToken)
 
-	if err := deleteCart(authToken); err != nil {
+	if total == 0 {
 		return c.JSON(http.StatusBadRequest, models.Response{
 			Status:  "bad request",
 			Message: "cart is empty",
