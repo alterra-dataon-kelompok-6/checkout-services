@@ -45,8 +45,8 @@ func New() *echo.Echo {
 
 	// Checkout
 	// r.GET("/myvoucher", controllers.GetMyVoucherController)
-	r.GET("/checkout", controllers.GetCheckoutTotalController)
-	r.GET("/checkout/:id", controllers.GetCheckoutByIdController)
+	// r.GET("/checkout", controllers.GetCheckoutTotalController)
+	// r.GET("/checkout/:id", controllers.GetCheckoutByIdController)
 	e.POST("/checkout", controllers.PostCheckoutController)
 
 	// Payment
@@ -54,7 +54,7 @@ func New() *echo.Echo {
 	// r.GET("/payment", controllers.GetPendingPaymentController)
 	// r.GET("/payment_history", controllers.GetPaymentHistoryController)
 	// r.GET("/payment_history/:id", controllers.GetPaymentDetailsControllers)
-	r.POST("/payment", controllers.PostPaymentController)
+	// r.POST("/payment", controllers.PostPaymentController)
 
 	return e
 }

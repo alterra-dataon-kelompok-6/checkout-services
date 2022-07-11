@@ -1,113 +1,104 @@
 package controllers
 
-import (
-	"checkout-services/lib/database"
-	"checkout-services/middlewares"
-	"checkout-services/models"
-	"net/http"
+// func GetPaymentMethodController(c echo.Context) error {
+// 	paymentMethod, err := database.GetPaymentMethod()
 
-	"github.com/labstack/echo/v4"
-)
+// 	if err != nil {
+// 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+// 	}
 
-func GetPaymentMethodController(c echo.Context) error {
-	paymentMethod, err := database.GetPaymentMethod()
+// 	return c.JSON(http.StatusOK, models.Response{
+// 		Status:  "success",
+// 		Message: "success get payment method",
+// 		Data:    paymentMethod,
+// 	})
+// }
 
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
+// func PostPaymentController(c echo.Context) error {
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	payloadData := make(map[string]string)
+// 	payloadData["payment_id"] = c.FormValue("payment_id")
+// 	payloadData["amount"] = c.FormValue("amount")
+// 	payloadData["payment_method"] = c.FormValue("payment_method")
+// 	payment, err := database.PostPayment(userId, payloadData)
 
-	return c.JSON(http.StatusOK, models.Response{
-		Status:  "success",
-		Message: "success get payment method",
-		Data:    paymentMethod,
-	})
-}
+// 	if err != nil {
+// 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+// 	}
 
-func PostPaymentController(c echo.Context) error {
-	userId := middlewares.ExtractTokenUserId(c)
-	payloadData := make(map[string]string)
-	payloadData["payment_id"] = c.FormValue("payment_id")
-	payloadData["amount"] = c.FormValue("amount")
-	payloadData["payment_method"] = c.FormValue("payment_method")
-	payment, err := database.PostPayment(userId, payloadData)
+// 	if payment == "Payment method invalid" || payment == "This bill has been paid" || payment == "The bill you want to pay was not found" {
+// 		return c.JSON(http.StatusBadRequest, models.Response{
+// 			Status:  "fail",
+// 			Message: payment,
+// 		})
+// 	}
 
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
+// 	return c.JSON(http.StatusOK, models.Response{
+// 		Status:  "success",
+// 		Message: "payment success",
+// 		Data:    payloadData["payment_id"],
+// 	})
+// }
 
-	if payment == "Payment method invalid" || payment == "This bill has been paid" || payment == "The bill you want to pay was not found" {
-		return c.JSON(http.StatusBadRequest, models.Response{
-			Status:  "fail",
-			Message: payment,
-		})
-	}
+// func GetPendingPaymentController(c echo.Context) error {
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	payment, err := database.GetPendingPayment(userId)
 
-	return c.JSON(http.StatusOK, models.Response{
-		Status:  "success",
-		Message: "payment success",
-		Data:    payloadData["payment_id"],
-	})
-}
+// 	if err != nil {
+// 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 
-func GetPendingPaymentController(c echo.Context) error {
-	userId := middlewares.ExtractTokenUserId(c)
-	payment, err := database.GetPendingPayment(userId)
+// 	} else if payment == false {
+// 		return c.JSON(http.StatusOK, models.Response{
+// 			Status:  "success",
+// 			Message: "You don't have pending payment",
+// 		})
+// 	}
 
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+// 	return c.JSON(http.StatusOK, models.Response{
+// 		Status:  "success",
+// 		Message: "success get pending payment",
+// 		Data:    payment,
+// 	})
+// }
 
-	} else if payment == false {
-		return c.JSON(http.StatusOK, models.Response{
-			Status:  "success",
-			Message: "You don't have pending payment",
-		})
-	}
+// func GetPaymentHistoryController(c echo.Context) error {
+// 	userId := middlewares.ExtractTokenUserId(c)
+// 	payment, err := database.GetPaymentHistory(userId)
 
-	return c.JSON(http.StatusOK, models.Response{
-		Status:  "success",
-		Message: "success get pending payment",
-		Data:    payment,
-	})
-}
+// 	if err != nil {
+// 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 
-func GetPaymentHistoryController(c echo.Context) error {
-	userId := middlewares.ExtractTokenUserId(c)
-	payment, err := database.GetPaymentHistory(userId)
+// 	} else if payment == false {
+// 		return c.JSON(http.StatusBadRequest, models.Response{
+// 			Status:  "fail",
+// 			Message: "You don't have payment history",
+// 		})
+// 	}
 
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+// 	return c.JSON(http.StatusOK, models.Response{
+// 		Status:  "success",
+// 		Message: "success get payment history",
+// 		Data:    payment,
+// 	})
+// }
 
-	} else if payment == false {
-		return c.JSON(http.StatusBadRequest, models.Response{
-			Status:  "fail",
-			Message: "You don't have payment history",
-		})
-	}
+// func GetPaymentDetailsControllers(c echo.Context) error {
+// 	id := c.Param("id")
+// 	paymentDetails, err := database.GetPaymentDetails(id)
 
-	return c.JSON(http.StatusOK, models.Response{
-		Status:  "success",
-		Message: "success get payment history",
-		Data:    payment,
-	})
-}
+// 	if err != nil {
+// 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 
-func GetPaymentDetailsControllers(c echo.Context) error {
-	id := c.Param("id")
-	paymentDetails, err := database.GetPaymentDetails(id)
+// 	} else if paymentDetails == false {
+// 		return c.JSON(http.StatusForbidden, models.Response{
+// 			Status:  "fail",
+// 			Message: "You don't have access to this data",
+// 		})
+// 	}
 
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-
-	} else if paymentDetails == false {
-		return c.JSON(http.StatusForbidden, models.Response{
-			Status:  "fail",
-			Message: "You don't have access to this data",
-		})
-	}
-
-	return c.JSON(http.StatusOK, models.Response{
-		Status:  "success",
-		Message: "success get payment details",
-		Data:    paymentDetails,
-	})
-}
+// 	return c.JSON(http.StatusOK, models.Response{
+// 		Status:  "success",
+// 		Message: "success get payment details",
+// 		Data:    paymentDetails,
+// 	})
+// }
