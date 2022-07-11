@@ -12,58 +12,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// type Body struct {
-// 	Stock uint `json:"stock"`
-// }
-
-// type ResponseCart struct {
-// 	Data   Cart `json:"data"`
-// 	Status bool `json:"status"`
-// }
-
-// type ResponseProduct struct {
-// 	Data   Product `json:"data"`
-// 	Status bool    `json:"status"`
-// }
-
-// type Cart struct {
-// 	Id         uint       `json:"id"`
-// 	CustomerId uint       `json:"customer_id"`
-// 	CreatedAt  string     `json:"created_at"`
-// 	UpdatedAt  string     `json:"updated_at"`
-// 	DeletedAt  string     `json:"deleted_at"`
-// 	CartItems  []CartItem `json:"cart_items"`
-// }
-
-// type CartItem struct {
-// 	Id        uint   `json:"id"`
-// 	CreatedAt string `json:"created_at"`
-// 	UpdatedAt string `json:"updated_at"`
-// 	DeletedAt string `json:"deleted_at"`
-// 	CartId    uint   `json:"cart_id"`
-// 	ProductId uint   `json:"product_id"`
-// 	Qty       uint   `json:"qty"`
-// }
-
-// type Product struct {
-// 	Id          uint     `json:"id"`
-// 	CreatedAt   string   `json:"created_at"`
-// 	UpdatedAt   string   `json:"updated_at"`
-// 	DeletedAt   string   `json:"deleted_at"`
-// 	CategoryId  uint     `json:"category_id"`
-// 	Name        string   `json:"name"`
-// 	Stock       uint     `json:"stock"`
-// 	Price       uint     `json:"price"`
-// 	Image       string   `json:"image"`
-// 	Description string   `json:"description"`
-// 	Category    Category `json:"category"`
-// }
-
-// type Category struct {
-// 	CategoryId uint   `json:"category_id"`
-// 	Category   string `json:"category"`
-// }
-
 func getQty(token string) ([]uint, []uint) {
 	var data models.ResponseCart
 	var productId, qty []uint
