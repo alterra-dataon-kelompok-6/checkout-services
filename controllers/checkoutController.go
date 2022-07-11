@@ -148,7 +148,7 @@ func updateStock(productId string, update uint) {
 	defer resp.Body.Close()
 }
 
-func deleteCart(token string) {
+func deleteCart(token string) error {
 	url := "http://54.179.213.175:8089/carts"
 
 	// create a Bearer string by appending string access token
@@ -173,6 +173,8 @@ func deleteCart(token string) {
 	}
 
 	defer resp.Body.Close()
+
+	return err
 }
 
 func PostCheckoutController(c echo.Context) error {
@@ -199,6 +201,14 @@ func PostCheckoutController(c echo.Context) error {
 	}
 
 	deleteCart(authToken)
+
+	if err := deleteCart(authToken); err != nil {
+		return c.JSON(http.StatusBadRequest, models.Response{
+			Status:  "bad request",
+			Message: "cart is empty",
+			Total:   total,
+		})
+	}
 
 	return c.JSON(http.StatusOK, models.Response{
 		Status:  "success",
